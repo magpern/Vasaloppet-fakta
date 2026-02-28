@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vasaloppet – Quiz</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, serif;
+      background: #f5f0e8;
+      color: #2c2c2c;
+      line-height: 1.7;
+    }
+
+    header {
+      background: #1a3a5c;
+      color: #fff;
+      padding: 2rem 1rem 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(1.6rem, 5vw, 2.6rem);
+      letter-spacing: 0.04em;
+    }
+
+    header p {
+      margin-top: 0.4rem;
+      font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+      opacity: 0.85;
+    }
+
+    .back-link {
+      background: #1a3a5c;
+      color: #f0c060;
+      text-align: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .back-link a { color: #f0c060; text-decoration: underline; }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    .intro {
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .question-block {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.4rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .question-block p.question-text {
+      font-weight: bold;
+      font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .options label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      font-size: clamp(0.9rem, 2.2vw, 1rem);
+    }
+
+    .options input[type="radio"] {
+      margin-top: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .feedback {
+      margin-top: 0.8rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 5px;
+      font-size: 0.93rem;
+      display: none;
+    }
+
+    .feedback.correct {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .feedback.incorrect {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .feedback.unanswered {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 1.5rem auto 0;
+      padding: 0.9rem 1.5rem;
+      background: #d4891a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .submit-btn:hover { background: #b8720f; }
+
+    #result-box {
+      display: none;
+      margin-top: 2rem;
+      background: #1a3a5c;
+      color: #fff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    #result-box h2 {
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      margin-bottom: 0.5rem;
+    }
+
+    #result-box p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    footer {
+      background: #1a3a5c;
+      color: #ccc;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+    }
+
+    footer a { color: #f0c060; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎿 Vasaloppet – quiz</h1>
+  <p>Testa dina kunskaper om Vasaloppet och Gustav Vasa</p>
+</header>
+
+<div class="back-link">
+  ← <a href="index.html">Tillbaka till faktasidan</a>
+</div>
+
+<main>
+  <p class="intro">Besvara alla frågor och klicka sedan på <strong>"Sänd in"</strong> för att se ditt resultat och feedback på varje fråga.</p>
+
+  <form id="quiz-form" novalidate>
+
+    <!-- Fråga 1 -->
+    <div class="question-block">
+      <p class="question-text">1. Vilket år hölls det första moderna Vasaloppet?</p>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a"> 1912</label>
+        <label><input type="radio" name="q1" value="b"> 1922</label>
+        <label><input type="radio" name="q1" value="c"> 1932</label>
+        <label><input type="radio" name="q1" value="d"> 1900</label>
+      </div>
+      <div class="feedback" id="fb1"></div>
+    </div>
+
+    <!-- Fråga 2 -->
+    <div class="question-block">
+      <p class="question-text">2. Hur lång är Vasaloppets officiella sträcka?</p>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a"> 50 kilometer</label>
+        <label><input type="radio" name="q2" value="b"> 75 kilometer</label>
+        <label><input type="radio" name="q2" value="c"> 90 kilometer</label>
+        <label><input type="radio" name="q2" value="d"> 100 kilometer</label>
+      </div>
+      <div class="feedback" id="fb2"></div>
+    </div>
+
+    <!-- Fråga 3 -->
+    <div class="question-block">
+      <p class="question-text">3. Var börjar Vasaloppet?</p>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a"> Mora</label>
+        <label><input type="radio" name="q3" value="b"> Falun</label>
+        <label><input type="radio" name="q3" value="c"> Sälen</label>
+        <label><input type="radio" name="q3" value="d"> Rättvik</label>
+      </div>
+      <div class="feedback" id="fb3"></div>
+    </div>
+
+    <!-- Fråga 4 -->
+    <div class="question-block">
+      <p class="question-text">4. Vem vann det allra första Vasaloppet 1922?</p>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a"> Nisse Karlsson</label>
+        <label><input type="radio" name="q4" value="b"> Thomas Wassberg</label>
+        <label><input type="radio" name="q4" value="c"> Ernst Alm</label>
+        <label><input type="radio" name="q4" value="d"> Anders Pers</label>
+      </div>
+      <div class="feedback" id="fb4"></div>
+    </div>
+
+    <!-- Fråga 5 -->
+    <div class="question-block">
+      <p class="question-text">5. Hur många gånger vann Nisse Karlsson "Mora-Nisse" Vasaloppet?</p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a"> 5 gånger</label>
+        <label><input type="radio" name="q5" value="b"> 7 gånger</label>
+        <label><input type="radio" name="q5" value="c"> 9 gånger</label>
+        <label><input type="radio" name="q5" value="d"> 12 gånger</label>
+      </div>
+      <div class="feedback" id="fb5"></div>
+    </div>
+
+    <!-- Fråga 6 -->
+    <div class="question-block">
+      <p class="question-text">6. Vilket år flydde Gustav Vasa genom Dalarna?</p>
+      <div class="options">
+        <label><input type="radio" name="q6" value="a"> 1523</label>
+        <label><input type="radio" name="q6" value="b"> 1497</label>
+        <label><input type="radio" name="q6" value="c"> 1520</label>
+        <label><input type="radio" name="q6" value="d"> 1512</label>
+      </div>
+      <div class="feedback" id="fb6"></div>
+    </div>
+
+    <!-- Fråga 7 -->
+    <div class="question-block">
+      <p class="question-text">7. Vad var Gustav Vasas mål med sin flykt genom Dalarna?</p>
+      <div class="options">
+        <label><input type="radio" name="q7" value="a"> Att fly till Norge</label>
+        <label><input type="radio" name="q7" value="b"> Att samla stöd mot den danska ockupationen</label>
+        <label><input type="radio" name="q7" value="c"> Att hämta skatter gömda i fjällen</label>
+        <label><input type="radio" name="q7" value="d"> Att möta norska allierade vid Sälen</label>
+      </div>
+      <div class="feedback" id="fb7"></div>
+    </div>
+
+    <!-- Fråga 8 -->
+    <div class="question-block">
+      <p class="question-text">8. Vem tog initiativet till det moderna Vasaloppet 1921?</p>
+      <div class="options">
+        <label><input type="radio" name="q8" value="a"> Thomas Wassberg</label>
+        <label><input type="radio" name="q8" value="b"> Anders Pers</label>
+        <label><input type="radio" name="q8" value="c"> Ernst Alm</label>
+        <label><input type="radio" name="q8" value="d"> King Gustaf V</label>
+      </div>
+      <div class="feedback" id="fb8"></div>
+    </div>
+
+    <!-- Fråga 9 -->
+    <div class="question-block">
+      <p class="question-text">9. Var slutar Vasaloppet?</p>
+      <div class="options">
+        <label><input type="radio" name="q9" value="a"> Sälen</label>
+        <label><input type="radio" name="q9" value="b"> Rättvik</label>
+        <label><input type="radio" name="q9" value="c"> Borlänge</label>
+        <label><input type="radio" name="q9" value="d"> Mora</label>
+      </div>
+      <div class="feedback" id="fb9"></div>
+    </div>
+
+    <!-- Fråga 10 -->
+    <div class="question-block">
+      <p class="question-text">10. Vilket år blev Gustav Vasa kung av Sverige?</p>
+      <div class="options">
+        <label><input type="radio" name="q10" value="a"> 1520</label>
+        <label><input type="radio" name="q10" value="b"> 1523</label>
+        <label><input type="radio" name="q10" value="c"> 1530</label>
+        <label><input type="radio" name="q10" value="d"> 1515</label>
+      </div>
+      <div class="feedback" id="fb10"></div>
+    </div>
+
+    <!-- Fråga 11 -->
+    <div class="question-block">
+      <p class="question-text">11. Vilket rekord satte Britta Johansson Norgren i Vasaloppet?</p>
+      <div class="options">
+        <label><input type="radio" name="q11" value="a"> Snabbaste damseger – 3 tim 54 min (2018)</label>
+        <label><input type="radio" name="q11" value="b"> Snabbaste damseger – 4 tim 10 min (2015)</label>
+        <label><input type="radio" name="q11" value="c"> Flest segrar bland damer – 6 gånger</label>
+        <label><input type="radio" name="q11" value="d"> Yngsta vinnaren – 19 år</label>
+      </div>
+      <div class="feedback" id="fb11"></div>
+    </div>
+
+    <!-- Fråga 12 -->
+    <div class="question-block">
+      <p class="question-text">12. Vilka två skidåkare skickades från Mora för att hämta tillbaka Gustav Vasa?</p>
+      <div class="options">
+        <label><input type="radio" name="q12" value="a"> Erik och Olof</label>
+        <label><input type="radio" name="q12" value="b"> Engelbrekt och Lars</label>
+        <label><input type="radio" name="q12" value="c"> Karl och Johan</label>
+        <label><input type="radio" name="q12" value="d"> Nils och Anders</label>
+      </div>
+      <div class="feedback" id="fb12"></div>
+    </div>
+
+    <!-- Fråga 13 -->
+    <div class="question-block">
+      <p class="question-text">13. Vilket lopp ingår Vasaloppet i?</p>
+      <div class="options">
+        <label><input type="radio" name="q13" value="a"> FIS Cross-Country World Cup</label>
+        <label><input type="radio" name="q13" value="b"> Nordic Combined Series</label>
+        <label><input type="radio" name="q13" value="c"> Ski Classics</label>
+        <label><input type="radio" name="q13" value="d"> Biathlon World Series</label>
+      </div>
+      <div class="feedback" id="fb13"></div>
+    </div>
+
+    <button type="button" class="submit-btn" id="submit-btn">Sänd in</button>
+
+    <div id="result-box">
+      <h2 id="result-title"></h2>
+      <p id="result-text"></p>
+    </div>
+
+  </form>
+</main>
+
+<footer>
+  <p>Vasaloppet Quiz | <a href="index.html">Tillbaka till faktasidan</a></p>
+</footer>
+
+<script>
+  const answers = {
+    q1:  { correct: 'b', explanation: 'Det första moderna Vasaloppet hölls den 19 mars 1922.' },
+    q2:  { correct: 'c', explanation: 'Vasaloppet är 90 kilometer långt, från Sälen till Mora.' },
+    q3:  { correct: 'c', explanation: 'Vasaloppet börjar vid Bångåsen i Sälen.' },
+    q4:  { correct: 'c', explanation: 'Ernst Alm vann det första loppet 1922 med tiden 7:32:49.' },
+    q5:  { correct: 'c', explanation: 'Mora-Nisse vann hela 9 gånger mellan 1937 och 1956.' },
+    q6:  { correct: 'c', explanation: 'Gustav Vasa flydde genom Dalarna vintern 1520.' },
+    q7:  { correct: 'b', explanation: 'Gustav Vasa ville samla dalkarlar i kampen mot den danska ockupationen.' },
+    q8:  { correct: 'b', explanation: 'Journalist Anders Pers publicerade idén i Tidningen Mora 1921.' },
+    q9:  { correct: 'd', explanation: 'Vasaloppet slutar vid Mora Strand i Mora.' },
+    q10: { correct: 'b', explanation: 'Gustav Vasa kröntes till kung av Sverige 1523.' },
+    q11: { correct: 'a', explanation: 'Britta Johansson Norgren satte damsegersrekord med 3:54:14 år 2018.' },
+    q12: { correct: 'b', explanation: 'Engelbrekt och Lars skickades ut för att hämta tillbaka Gustav Vasa.' },
+    q13: { correct: 'c', explanation: 'Vasaloppet ingår i Ski Classics, en europeisk serie av långa skidlopp.' }
+  };
+
+  document.getElementById('submit-btn').addEventListener('click', function () {
+    let score = 0;
+    const total = Object.keys(answers).length;
+
+    for (const qName in answers) {
+      const info = answers[qName];
+      const selected = document.querySelector('input[name="' + qName + '"]:checked');
+      const fbEl = document.getElementById('fb' + qName.slice(1));
+
+      fbEl.style.display = 'block';
+      fbEl.className = 'feedback';
+
+      if (!selected) {
+        fbEl.classList.add('unanswered');
+        fbEl.textContent = '⚠️ Du svarade inte på denna fråga. Rätt svar: alternativ ' + info.correct.toUpperCase() + '. ' + info.explanation;
+      } else if (selected.value === info.correct) {
+        score++;
+        fbEl.classList.add('correct');
+        fbEl.textContent = '✅ Rätt! ' + info.explanation;
+      } else {
+        fbEl.classList.add('incorrect');
+        fbEl.textContent = '❌ Fel. Rätt svar: alternativ ' + info.correct.toUpperCase() + '. ' + info.explanation;
+      }
+    }
+
+    const resultBox = document.getElementById('result-box');
+    const resultTitle = document.getElementById('result-title');
+    const resultText = document.getElementById('result-text');
+
+    resultBox.style.display = 'block';
+    resultTitle.textContent = 'Resultat: ' + score + ' av ' + total + ' rätt';
+
+    const pct = Math.round((score / total) * 100);
+    let comment;
+    if (pct === 100) {
+      comment = '🏆 Perfekt! Du är en riktig Vasaloppets-expert!';
+    } else if (pct >= 70) {
+      comment = '👏 Bra jobbat! Du kan din Vasaloppets-historia!';
+    } else if (pct >= 40) {
+      comment = '🎿 Hyfsad! Läs faktasidan och försök igen!';
+    } else {
+      comment = '📚 Läs på fakta-sidan och försök igen – du klarar det!';
+    }
+    resultText.textContent = comment;
+
+    resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+</script>
+
+</body>
+</html>
