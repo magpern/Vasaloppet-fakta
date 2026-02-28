@@ -23,6 +23,12 @@ Efter några minuter är sajten tillgänglig på:
 https://magpern.github.io/Vasaloppet-fakta/
 ```
 
+## QR-kod till quizet
+
+Skanna koden nedan för att öppna quizet direkt på din mobil:
+
+[![QR-kod till quizet](qr-quiz.png)](https://magpern.github.io/Vasaloppet-fakta/quiz.html)
+
 ## Lokal förhandsvisning
 
 Öppna `index.html` direkt i webbläsaren, eller starta en lokal server:
